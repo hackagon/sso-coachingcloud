@@ -1,0 +1,80 @@
+.account .mdl-card__actions{
+    padding: 20px;
+    min-height: unset;
+}
+.account__info{
+    display: flex;
+}
+.account__info__icon{
+    margin-right: 20px;
+}
+.account__info .material-icons{
+    color: rgb(188, 188, 188);
+    font-size: 50px;
+}
+.account__info__icon img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+.account__info p{
+    margin: 0px;
+    text-align: left;
+}
+.account__info .account__info__name{
+    font-weight: bold;
+}
+
+.account__logout{
+    margin-top: 20px;
+    text-align: left;
+}
+
+.account button{
+    color: rgb(33, 150, 243)!important;
+    font-weight: bold;
+    padding: 0 25px;
+}
+
+.account button:hover{
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    -webkit-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    -moz-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    -ms-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    -o-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+}
+
+.account__logout{
+    color: rgba(0, 0, 0, 0.54)
+}
+.account__activities li{
+    padding: 0;
+}
+.account__activities a{
+    color: black;
+    text-decoration: none;
+    display: block;
+    height: 100%;
+    width: 100%;
+    padding: 10px 20px;
+}
+
+.account__activities li:hover{
+    background: rgb(188, 188, 188);
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    -webkit-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    -moz-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    -ms-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    -o-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+}
+
+/* responsive */
+@media screen and (max-width: 767px){
+    a{
+        text-align: center;
+    }
+}

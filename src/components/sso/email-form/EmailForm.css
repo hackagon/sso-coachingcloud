@@ -1,0 +1,60 @@
+.login-form .mdl-list {
+    display: flex;
+    justify-content: center;
+}
+.login-form .mdl-card__actions{
+    width: 90%;
+}
+.seperate-line {
+    overflow: hidden;
+}
+.seperate-line span{
+    position: relative;
+}
+.seperate-line span::before{
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    margin-right: 30px;
+    width: 9999px;
+    height: 1px;
+    background: #d8d8d8;
+}
+.seperate-line span::after{
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: 30px;
+    width: 9999px;
+    height: 1px;
+    background: #d8d8d8;
+}
+
+.login-form form {
+    margin-top: 20px;
+}
+.login-form .mdl-textfield{
+    width: 100%;
+}
+
+/* .login-form .align-button{
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.login-form button{
+    color: white!important;
+    font-weight: bold;
+    padding: 0 25px;
+}
+.login-form button:hover{
+    opacity: 0.5;
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    -webkit-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    -moz-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    -ms-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    -o-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+} */
