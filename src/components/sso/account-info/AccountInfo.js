@@ -4,6 +4,8 @@ import './AccountInfo.css'
 
 class AccountInfo extends Component {
     render() {
+        const user = this.props.user
+        console.log(this.props)
         return (
             <div className="sso-card account mdl-card mdl-shadow--2dp">
                 <div className="mdl-card__title">
@@ -13,17 +15,17 @@ class AccountInfo extends Component {
                     <div className="account__info">
                         <div className="account__info__icon">
                             <img 
-                                src={this.props.user.avatar}
-                                alt={this.props.user.name}
+                                src={user.avatar ? user.avatar : './img/user.jpg'}
+                                alt={`${user.firstname} ${user.lastname}`}
                             />
                         </div>
 
                         <div className="account__info__text">
                             <p className="account__info__name">
-                                {this.props.user.name}
+                                {`${user.firstname} ${user.lastname}`}
                             </p>
                             <p className="account__info__email">
-                                {this.props.email}
+                                {user.email}
                             </p>
                         </div>
                     </div>

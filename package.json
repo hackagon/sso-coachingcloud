@@ -2,12 +2,13 @@
   "name": "sso",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://sso.coachingcloud.com/jwt",
   "dependencies": {
     "axios": "^0.18.0",
+    "http-proxy-middleware": "^0.19.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-scripts": "2.1.2",
-    "react-toastify": "^4.5.1",
     "sweetalert": "^2.1.2"
   },
   "scripts": {

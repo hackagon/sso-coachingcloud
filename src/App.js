@@ -14,18 +14,41 @@ class App extends Component {
         this.state = {
             email: "",
             password: "",
-            data: null,
             user: null,
             isAuthenticated: false
         }
     }
 
     componentDidMount = () => {
-        axios.get('http://5c286868dc7d0a00144c2e1a.mockapi.io/users')
-            .then(res => {
-                this.setState({ data: res.data })
+        const token = localStorage.getItem('token');
+        axios({
+            method: 'GET',
+            params: {
+                token: token,
+                fingerprint: 'fingerprint'
+            },
+            url: 'https://sso.coachingcloud.com/jwt',
+        })
+        .then(res => {
+            if(res.status === 200){
+                return axios({
+                    method: 'GET',
+                    headers: {
+                        "access-control-allow-origin" : "*",
+                        "Authorization": "Bearer " + token,
+                        "X-Fingerprint": 'fingerprint'
+                    },
+                    url: 'https://sso.coachingcloud.com/me',
+                })
+            }
+        })
+        .then(res => {
+            this.setState({
+                isAuthenticated: true,
+                user: res.data
             })
-            .catch(console.log)
+        })
+        .catch(console.log)
     }
 
     getEmail = (email) => {
@@ -44,22 +67,41 @@ class App extends Component {
     }
 
     login = () => {
-        const { data, email, password } = this.state;
-        let index = -1;
-        for (let i in data) {
-            if (data[i].email === email && data[i].password === password) {
-                index = i;
-                this.setState({
-                    isAuthenticated: true,
-                    user: data[i]
-                })
-            }
+        const { email, password } = this.state;
+        const user = {
+            email, password, fingerprint: 'fingerprint'
         }
-
-        if (index === -1) {
-            swal("NOT MATCH", "Email and password do not match", "error")
-                .then(this.setState({email: "", password: ""}))
-        }
+        
+        axios({
+            method: 'POST',
+            headers: {
+                "access-control-allow-origin" : "*",
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            url: 'https://sso.coachingcloud.com/jwt',
+            data: user
+        })
+        .then(res => {
+            const {token} = res.data;
+            localStorage.setItem("token", token);
+            // this.setState({isAuthenticated: true})
+            return axios({
+                method: 'GET',
+                headers: {
+                    "access-control-allow-origin" : "*",
+                    "Authorization": "Bearer " + token,
+                    "X-Fingerprint": 'fingerprint'
+                },
+                url: 'https://sso.coachingcloud.com/me',
+            })
+        })
+        .then(res => {
+            this.setState({
+                isAuthenticated: true,
+                user: res.data
+            })
+        })
+        .catch(console.log)
     }
 
     logout = () => {
@@ -69,6 +111,7 @@ class App extends Component {
             isAuthenticated: false,
             user: null
         })
+        localStorage.removeItem('token')
     }
 
     render() {

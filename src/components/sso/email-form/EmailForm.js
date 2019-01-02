@@ -22,7 +22,6 @@ class EmailForm extends Component {
     }
 
     render() {
-        console.log("email")
         return (
             <div className="sso-card login-form mdl-card mdl-shadow--2dp">
                 <div className="mdl-card__title">
