@@ -7,6 +7,7 @@ import swal from 'sweetalert'
 import EmailForm from './components/sso/email-form/EmailForm';
 import PasswordForm from './components/sso/password-form/PasswordForm';
 import AccountInfo from './components/sso/account-info/AccountInfo';
+import Loading from './components/sso/loading/Loading';
 
 class App extends Component {
     constructor(props) {
@@ -15,40 +16,30 @@ class App extends Component {
             email: "",
             password: "",
             user: null,
-            isAuthenticated: false
+            isAuthenticated: false,
+            renderComponent: "email",
         }
     }
 
     componentDidMount = () => {
         const token = localStorage.getItem('token');
-        axios({
-            method: 'GET',
-            params: {
-                token: token,
-                fingerprint: 'fingerprint'
-            },
-            url: 'https://sso.coachingcloud.com/jwt',
-        })
-        .then(res => {
-            if(res.status === 200){
-                return axios({
-                    method: 'GET',
-                    headers: {
-                        "access-control-allow-origin" : "*",
-                        "Authorization": "Bearer " + token,
-                        "X-Fingerprint": 'fingerprint'
-                    },
-                    url: 'https://sso.coachingcloud.com/me',
-                })
-            }
-        })
-        .then(res => {
-            this.setState({
-                isAuthenticated: true,
-                user: res.data
+        if(token){
+            this.setState({renderComponent: "loading"})
+            axios({
+                method: 'GET',
+                params: {
+                    token: token,
+                    fingerprint: 'fingerprint'
+                },
+                url: '/jwt',
             })
-        })
-        .catch(console.log)
+            .then(res => {
+                if(res.status === 200){
+                    this.getUser(token)
+                }
+            })
+            .catch(console.log)
+        }
     }
 
     getEmail = (email) => {
@@ -62,38 +53,18 @@ class App extends Component {
         })
     }
 
-    getBack = () => {
-        
+    changeRenderComponent = (renderComponent) => {
+        this.setState({renderComponent})
     }
 
-    login = () => {
-        const { email, password } = this.state;
-        const user = {
-            email, password, fingerprint: 'fingerprint'
-        }
-        
+    getUser = (token) => {
         axios({
-            method: 'POST',
+            method: 'GET',
             headers: {
-                "access-control-allow-origin" : "*",
-                "Content-type": "application/json; charset=UTF-8"
+                "Authorization": "Bearer " + token,
+                "X-Fingerprint": 'fingerprint'
             },
-            url: 'https://sso.coachingcloud.com/jwt',
-            data: user
-        })
-        .then(res => {
-            const {token} = res.data;
-            localStorage.setItem("token", token);
-            // this.setState({isAuthenticated: true})
-            return axios({
-                method: 'GET',
-                headers: {
-                    "access-control-allow-origin" : "*",
-                    "Authorization": "Bearer " + token,
-                    "X-Fingerprint": 'fingerprint'
-                },
-                url: 'https://sso.coachingcloud.com/me',
-            })
+            url: '/me',
         })
         .then(res => {
             this.setState({
@@ -104,34 +75,64 @@ class App extends Component {
         .catch(console.log)
     }
 
+    login = () => {
+        const { email, password } = this.state;
+        const user = {
+            email, password, fingerprint: 'fingerprint'
+        }
+        this.setState({renderComponent: "loading"})
+        axios({
+            method: 'POST',
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+
+            url: '/jwt',
+            data: user
+        })
+        .then(res => {
+            console.log(res.data)
+            const {token} = res.data;
+            localStorage.setItem("token", token);
+            // this.setState({isAuthenticated: true})
+            this.getUser(token)
+        })
+        .catch(err => {
+            swal ( "Oops" ,  `${err.response.data.message}` ,  "error" )
+            this.setState({renderComponent: "email"})
+        })
+    }
+
     logout = () => {
         this.setState({
             email: "",
             password: "",
             isAuthenticated: false,
-            user: null
+            user: null,
+            renderComponent: "email"
         })
         localStorage.removeItem('token')
     }
 
     render() {
-        const { email, password, isAuthenticated } = this.state;
-        let elmSSO = <EmailForm
-            getEmail={this.getEmail}
-            {...this.state}
-        />;
+        const { isAuthenticated, renderComponent } = this.state;
+        let elmSSO;
 
         if (!isAuthenticated) {
-            if (!email) {
+            if (renderComponent === "email") {
                 elmSSO = <EmailForm
                     getEmail={this.getEmail}
+                    changeRenderComponent={this.changeRenderComponent}
                     {...this.state}
                 />
-            } else if (email && !password) {
+            } else if (renderComponent === "password") {
                 elmSSO = <PasswordForm
                     {...this.state}
                     getPassword={this.getPassword}
+                    changeRenderComponent={this.changeRenderComponent}
                 />
+            } else {
+                elmSSO = <Loading />
             }
         } else {
             elmSSO = <AccountInfo

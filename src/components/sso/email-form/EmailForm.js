@@ -9,10 +9,16 @@ class EmailForm extends Component {
             email: "",
         }
     }
+
+    componentDidMount() {
+        this.setState({email: this.props.email})
+    }
+    
     
     onSubmit = (e) => {
         e.preventDefault()
         this.props.getEmail(this.state.email)
+        this.props.changeRenderComponent('password')
     }
 
     onChange = (e) => {

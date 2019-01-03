@@ -10,6 +10,10 @@ class PasswordForm extends Component {
         }
     }
 
+    componentDidMount() {
+        this.setState({password: this.props.password})
+    }
+
     onSubmit = (e) => {
         e.preventDefault()
         this.props.getPassword(this.state.password)
@@ -45,6 +49,7 @@ class PasswordForm extends Component {
                                 type="password" 
                                 name="password"
                                 onChange={this.onChange}
+                                value={this.state.password}
                             />
                             <label 
                                 className="mdl-textfield__label" 
@@ -62,6 +67,7 @@ class PasswordForm extends Component {
                             <button 
                                 className="mdl-button button-navigate mdl-js-button mdl-button--raised mdl-button--colored"
                                 type="button"
+                                onClick={this.props.changeRenderComponent.bind(this, "email")}
                             >
                                 BACK
                             </button>
